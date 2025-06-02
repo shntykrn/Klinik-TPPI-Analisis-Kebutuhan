@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import LoadingSpinner from "./components/LoadingSpinner"
 import Navbar from './components/NavBar';
+import Layout from "./components/Layout";
 
 // Lazy load pages
 const LoginPage = lazy(() => import("./routes/login"))

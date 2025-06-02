@@ -13,10 +13,6 @@ const Header = () => {
         </button>
       </div>
 
-      <div className="flex-1 md:text-center md:flex-initial">
-        <h1 className="text-xl font-bold text-[#362969]">Klinik Sehat Sejahtera</h1>
-      </div>
-
       <div className="flex items-center space-x-4">
         <button className="text-gray-500 relative">
           <Bell size={20} />

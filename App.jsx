@@ -20,7 +20,7 @@ function App() {
 
           {/* Protected routes with Layout */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/rekam-medis" replace />} />
+            <Route index element={<Navigate to="/login" replace />} />
             <Route path="rekam-medis" element={<RekamMedisPage />} />
             <Route path="surat-sakit" element={<SuratSakitPage />} />
             <Route path="stok-obat" element={<StokObatPage />} />

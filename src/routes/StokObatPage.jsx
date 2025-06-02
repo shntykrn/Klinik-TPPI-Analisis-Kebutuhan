@@ -1,4 +1,3 @@
-"use client"
 import { useState } from "react"
 import { Search, Plus, Filter, ChevronDown } from "lucide-react"
 import ObatCard from "@/components/ObatCard"
@@ -8,9 +7,9 @@ import RiwayatStokModal from "@/components/RiwayatStokModal"
 
 // Data dummy (nanti bisa diganti dengan data dari API)
 const dummyMedicines = [
-  { id: 1, name: "Dapyrin 500mg", stock: 40, unit: "Tablet", expDate: "2025-09", image: "/images/dapyrin.jpg", description: "Deskripsi Dapyrin..." },
-  { id: 2, name: "Amoxicillin 500mg", stock: 80, unit: "Kapsul", expDate: "2025-12", image: "/images/amoxicillin.jpg", description: "Deskripsi Amoxicillin..." },
-  { id: 3, name: "Cetirizine 10mg", stock: 20, unit: "Tablet", expDate: "2025-11", image: "/images/cetirizine.jpg", description: "Deskripsi Cetirizine..." },
+  { id: 1, name: "Dapyrin 500mg", stock: 40, unit: "Tablet", expDate: "2025-09", image: "../assets/dapyrin.png", description: "Deskripsi Dapyrin..." },
+  { id: 2, name: "Amoxicillin 500mg", stock: 80, unit: "Kapsul", expDate: "2025-12", image: "../assets/cefadroxil.png", description: "Deskripsi Amoxicillin..." },
+  { id: 3, name: "Cetirizine 10mg", stock: 20, unit: "Tablet", expDate: "2025-11", image: "../assets/alleron.png", description: "Deskripsi Cetirizine..." },
 ]
 
 const StokObatPage = () => {
