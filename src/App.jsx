@@ -3,9 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoadingSpinner from "./components/LoadingSpinner"
 import Navbar from './components/NavBar';
 import Layout from "./components/Layout";
+import LandingRegister from "./routes/LandingRegister";
+import Login from "./routes/Login";
 
 // Lazy load pages
-const LoginPage = lazy(() => import("./routes/login"))
+const LoginPage = lazy(() => import("./routes/Login"))
 const RegisterPage = lazy(() => import("./routes/LandingRegister"))
 const RekamMedisPage = lazy(() => import("./routes/RekamMedisPage"))
 const SuratSakitPage = lazy(() => import("./routes/SuratSakitPage"))
@@ -17,12 +19,14 @@ function App() {
       <Navbar />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/landing" element={<RegisterPage />} />
+          {/* <Route path="/login" element={<LoginPage />} /> */}
+          {/* <Route path="/landing" element={<RegisterPage />} /> */}
 
           {/* Protected routes with Layout */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/rekam-medis" replace />} />
+            <Route path="login" element={<Login />} />
+            <Route path="registrasi" element={<LandingRegister />} />
             <Route path="rekam-medis" element={<RekamMedisPage />} />
             <Route path="surat-sakit" element={<SuratSakitPage />} />
             <Route path="stok-obat" element={<StokObatPage />} />
