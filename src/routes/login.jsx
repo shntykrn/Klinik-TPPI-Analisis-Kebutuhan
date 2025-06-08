@@ -2,8 +2,8 @@ import { useState } from "react"
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { Form, Button } from "react-bootstrap"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
-import logo from "./assets/logo-tppi.png"
-import bgImage from "./assets/bg-tppi.png"
+import logo from "../assets/logo-tppi.png"
+import bgImage from "../assets/bg-tppi.png"
 
 export const Route = createLazyFileRoute("/login")({
   component: Login,
