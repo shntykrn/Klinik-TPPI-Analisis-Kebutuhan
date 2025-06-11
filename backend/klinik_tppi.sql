@@ -190,6 +190,8 @@ ALTER TABLE `riwayat_obat`
 ALTER TABLE `surat_sakit`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pasien` (`id_pasien`);
+  ALTER TABLE surat_sakit ADD gambar_url TEXT AFTER alasan;
+
 
 --
 -- AUTO_INCREMENT for dumped tables
