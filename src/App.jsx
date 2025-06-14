@@ -1,17 +1,18 @@
+import React from "react"
 import { Suspense, lazy } from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import LoadingSpinner from "./src/components/LoadingSpinner"
-import Navbar from './src/components/NavBar';
-import Layout from "./src/components/Layout";
-import LandingRegister from "./src/routes/LandingRegister";
-import Login from "./src/routes/Login";
+import LoadingSpinner from "./components/LoadingSpinner"
+import Navbar from './components/NavBar';
+import Layout from "./components/Layout";
+import LandingRegister from "./routes/LandingRegister";
+import Login from "./routes/Login";
 
 // Lazy load pages
-const LoginPage = lazy(() => import("./src/routes/Login"))
-const RegisterPage = lazy(() => import("./src/routes/LandingRegister"))
-const RekamMedisPage = lazy(() => import("./src/routes/RekamMedisPage"))
-const SuratSakitPage = lazy(() => import("./src/routes/SuratSakitPage"))
-const StokObatPage = lazy(() => import("./src/routes/StokObatPage"))
+const LoginPage = lazy(() => import("./routes/Login"))
+const RegisterPage = lazy(() => import("./routes/LandingRegister"))
+const RekamMedisPage = lazy(() => import("./routes/RekamMedisPage"))
+const SuratSakitPage = lazy(() => import("./routes/SuratSakitPage"))
+const StokObatPage = lazy(() => import("./routes/StokObatPage"))
 
 function App() {
   return (

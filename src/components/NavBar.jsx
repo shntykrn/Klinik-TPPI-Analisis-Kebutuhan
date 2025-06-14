@@ -1,3 +1,4 @@
+import React from "react"
 import { Link, useLocation } from "react-router-dom"
 
 // Import the logo - adjust the path as needed
@@ -11,7 +12,7 @@ const Navbar = () => {
     { name: "REGISTRASI", path: "/registrasi" },
     { name: "REKAM MEDIS", path: "/rekam-medis" },
     { name: "SURAT SAKIT", path: "/surat-sakit" },
-    { name: "STOCK OBAT", path: "/stock-obat" },
+    { name: "STOCK OBAT", path: "/stok-obat" },
   ]
 
   // Check if the current path matches the nav item path
