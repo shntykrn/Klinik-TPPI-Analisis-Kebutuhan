@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const pasienController = require("../controllers/PasienController");
 
 router.get("/", async (req, res) => {
   try {
@@ -10,5 +11,6 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Gagal mengambil data pasien", detail: err.message });
   }
 });
+router.delete("/delete/:id", pasienController.deletePasien);
 
 module.exports = router;

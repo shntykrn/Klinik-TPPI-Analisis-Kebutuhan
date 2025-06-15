@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Eye, Trash2 } from "lucide-react"
 
 const RekamMedisPage = () => {
   const [selectedPatient, setSelectedPatient] = useState(null)
@@ -9,7 +9,6 @@ const RekamMedisPage = () => {
   const [patients, setPatients] = useState([])
   const [riwayat, setRiwayat] = useState([])
 
-  // Form states
   const [tanggalPemeriksaan, setTanggalPemeriksaan] = useState("")
   const [keluhan, setKeluhan] = useState("")
   const [tensiAtas, setTensiAtas] = useState("")
@@ -25,18 +24,10 @@ const RekamMedisPage = () => {
       .catch((err) => console.error("Gagal fetch pasien", err))
   }, [])
 
-  const filtered = patients.filter(
-    (p) =>
-      p.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.nik.includes(searchTerm)
-  )
-
   const fetchRiwayat = (id) => {
     fetch("http://localhost:5000/api/rekam-medis/get")
       .then((res) => res.json())
-      .then((data) =>
-        setRiwayat(data.filter((item) => item.id_pasien === id))
-      )
+      .then((data) => setRiwayat(data.filter((item) => item.id_pasien === id)))
   }
 
   const handleSubmit = async (e) => {
@@ -99,8 +90,14 @@ const RekamMedisPage = () => {
     }
   }
 
+  const filtered = patients.filter(
+    (p) =>
+      p.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.nik.includes(searchTerm)
+  )
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-center text-2xl font-semibold mb-6">PASIEN</h1>
 
       {!selectedPatient ? (
@@ -114,31 +111,35 @@ const RekamMedisPage = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100">
+                <th className="px-4 py-2">No. Rekam</th>
                 <th className="px-4 py-2">NIK</th>
                 <th className="px-4 py-2">Nama</th>
-                <th className="px-4 py-2">Aksi</th>
+                <th className="px-4 py-2 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((p) => (
                 <tr key={p.id} className="border-t">
+                  <td className="px-4 py-2">{p.id}</td>
                   <td className="px-4 py-2">{p.nik}</td>
                   <td className="px-4 py-2">{p.nama}</td>
-                  <td className="px-4 py-2 space-x-2">
+                  <td className="px-4 py-2 text-right space-x-2">
                     <button
                       onClick={() => {
                         setSelectedPatient(p)
                         fetchRiwayat(p.id)
                       }}
-                      className="bg-[#cfc3ea] text-xs px-3 py-1 rounded-md"
+                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
                     >
-                      LIHAT
+                      <Eye className="w-4 h-4" />
+                      {/* Lihat */}
                     </button>
                     <button
                       onClick={() => handleDeletePasien(p.id)}
-                      className="bg-red-500 text-white text-xs px-3 py-1 rounded-md"
+                      className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
                     >
-                      HAPUS
+                      <Trash2 className="w-4 h-4" />
+                      {/* Hapus */}
                     </button>
                   </td>
                 </tr>

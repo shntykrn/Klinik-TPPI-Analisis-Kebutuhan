@@ -41,13 +41,18 @@ CREATE TABLE `diagnosis` (
 -- Table structure for table `obat`
 --
 
-CREATE TABLE `obat` (
-  `id` int(11) NOT NULL,
-  `nama_obat` varchar(100) DEFAULT NULL,
-  `stok` int(11) DEFAULT 0,
-  `dibuat_pada` datetime DEFAULT current_timestamp(),
-  `diperbarui_pada` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE obat (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nama_obat VARCHAR(100) NOT NULL,
+  stok INT DEFAULT 0,
+  satuan VARCHAR(50), -- opsional, misal: Tablet, Kapsul
+  tanggal_kadaluarsa DATE, -- ⬅️ INI untuk exp date
+  gambar VARCHAR(255), -- jika ingin simpan URL gambar
+  deskripsi TEXT,
+  dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+  diperbarui_pada DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 -- --------------------------------------------------------
 

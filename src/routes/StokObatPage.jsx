@@ -1,26 +1,34 @@
-import React from "react"
-import { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Search, Plus, Filter, ChevronDown } from "lucide-react"
 import ObatCard from "../components/ObatCard"
 import ObatDetailModal from "../components/ObatDetailModal"
 import TambahObatModal from "../components/TambahObatModal"
 import RiwayatStokModal from "../components/RiwayatStokModal"
 
-// Data dummy (nanti bisa diganti dengan data dari API)
-const dummyMedicines = [
-  { id: 1, name: "Dapyrin 500mg", stock: 40, unit: "Tablet", expDate: "2025-09", image: "../assets/dapyrin.png", description: "Deskripsi Dapyrin..." },
-  { id: 2, name: "Amoxicillin 500mg", stock: 80, unit: "Kapsul", expDate: "2025-12", image: "../assets/cefadroxil.png", description: "Deskripsi Amoxicillin..." },
-  { id: 3, name: "Cetirizine 10mg", stock: 20, unit: "Tablet", expDate: "2025-11", image: "../assets/alleron.png", description: "Deskripsi Cetirizine..." },
-]
-
 const StokObatPage = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedObat, setSelectedObat] = useState(null)
   const [isTambahOpen, setIsTambahOpen] = useState(false)
   const [isRiwayatOpen, setIsRiwayatOpen] = useState(false)
+  const [medicines, setMedicines] = useState([])
 
-  const filteredMedicines = dummyMedicines.filter((obat) =>
-    obat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Ambil data obat dari backend
+  const fetchObat = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/obat")
+      const data = await res.json()
+      setMedicines(data)
+    } catch (err) {
+      console.error("Gagal fetch obat:", err)
+    }
+  }
+
+  useEffect(() => {
+    fetchObat()
+  }, [])
+
+  const filteredMedicines = medicines.filter((obat) =>
+    obat.nama_obat.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -72,6 +80,7 @@ const StokObatPage = () => {
         ))}
       </div>
 
+      {/* MODALS */}
       {selectedObat && (
         <ObatDetailModal
           obat={selectedObat}
@@ -79,7 +88,12 @@ const StokObatPage = () => {
         />
       )}
       {isTambahOpen && (
-        <TambahObatModal onClose={() => setIsTambahOpen(false)} />
+        <TambahObatModal
+          onClose={() => {
+            setIsTambahOpen(false)
+            fetchObat()
+          }}
+        />
       )}
       {isRiwayatOpen && (
         <RiwayatStokModal onClose={() => setIsRiwayatOpen(false)} />

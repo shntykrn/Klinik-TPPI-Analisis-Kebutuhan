@@ -1,50 +1,51 @@
-// controllers/obatController.js
 const db = require('../config/db');
 
-exports.getAllObat = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM obat');
-    res.status(200).json(rows);
-  } catch (error) {
-    res.status(500).json({ error: 'Gagal mengambil data obat', detail: error.message });
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Gagal ambil data obat', detail: err.message });
   }
 };
 
-exports.createObat = async (req, res) => {
+exports.create = async (req, res) => {
   const { nama_obat, stok } = req.body;
 
-  if (!nama_obat || stok === undefined) {
-    return res.status(400).json({ error: 'Nama obat dan stok wajib diisi' });
-  }
+  if (!nama_obat) return res.status(400).json({ error: 'Nama obat wajib diisi' });
 
   try {
-    const [result] = await db.execute(
+    await db.execute(
       'INSERT INTO obat (nama_obat, stok) VALUES (?, ?)',
-      [nama_obat, stok]
+      [nama_obat, stok || 0]
     );
-
-    res.status(201).json({ message: 'Obat berhasil ditambahkan', id: result.insertId });
-  } catch (error) {
-    res.status(500).json({ error: 'Gagal menambahkan obat', detail: error.message });
+    res.status(201).json({ message: 'Obat ditambahkan' });
+  } catch (err) {
+    res.status(500).json({ error: 'Gagal tambah obat', detail: err.message });
   }
 };
 
-exports.updateObat = async (req, res) => {
+exports.delete = async (req, res) => {
   const { id } = req.params;
-  const { nama_obat, stok } = req.body;
+  try {
+    await db.execute('DELETE FROM obat WHERE id = ?', [id]);
+    res.json({ message: 'Obat dihapus' });
+  } catch (err) {
+    res.status(500).json({ error: 'Gagal hapus obat', detail: err.message });
+  }
+};
+
+exports.uploadImage = async (req, res) => {
+  const { nama_obat, stok, satuan, exp_date, deskripsi } = req.body;
+  const gambar = req.file ? req.file.path : null;
 
   try {
-    const [result] = await db.execute(
-      'UPDATE obat SET nama_obat = ?, stok = ? WHERE id = ?',
-      [nama_obat, stok, id]
+    await db.execute(
+      'INSERT INTO obat (nama_obat, stok, satuan, exp_date, deskripsi, gambar) VALUES (?, ?, ?, ?, ?, ?)',
+      [nama_obat, stok, satuan, exp_date, deskripsi, gambar]
     );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Obat tidak ditemukan' });
-    }
-
-    res.status(200).json({ message: 'Obat berhasil diperbarui' });
-  } catch (error) {
-    res.status(500).json({ error: 'Gagal memperbarui obat', detail: error.message });
+    res.status(201).json({ message: 'Obat ditambahkan' });
+  } catch (err) {
+    res.status(500).json({ error: 'Gagal tambah obat', detail: err.message });
   }
 };

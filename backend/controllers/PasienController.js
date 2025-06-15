@@ -46,3 +46,17 @@ exports.createPasien = async (req, res) => {
     res.status(500).json({ error: 'Gagal menambahkan pasien', detail: error.message });
   }
 };
+
+exports.deletePasien = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const [result] = await db.execute('DELETE FROM pasien WHERE id = ?', [id])
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Pasien tidak ditemukan' })
+    }
+    res.status(200).json({ message: 'Pasien berhasil dihapus' })
+  } catch (error) {
+    res.status(500).json({ error: 'Gagal menghapus pasien', detail: error.message })
+  }
+}

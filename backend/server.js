@@ -5,18 +5,23 @@ const imageRoutes = require('./routes/imageRoutes');
 const penggunaRoutes = require('./routes/PenggunaRoutes');
 const rekamMedisRoutes = require('./routes/RekamMedisRoutes');
 const pasienRoutes = require('./routes/PasienRoutes');
-const db = require('./config/db'); // ⬅️ tambahkan ini
+const obatRoutes = require('./routes/ObatRoutes');
+const path = require('path');
+
+const db = require('./config/db'); 
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/public/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 app.use('/api', imageRoutes);
 app.use('/api/pengguna', penggunaRoutes);
 app.use('/api/rekam-medis', rekamMedisRoutes);
 app.use('/api/pasien', pasienRoutes);
+app.use('/api/obat', obatRoutes);
 
 // Test DB connection
 db.getConnection()
