@@ -1,4 +1,3 @@
-// components/TambahObatModal.jsx
 import React, { useState } from "react"
 import { X } from "lucide-react"
 
@@ -8,10 +7,11 @@ export default function TambahObatModal({ onClose }) {
     kategori: "",
     stok: 0,
     satuan: "",
-    exp_date: "",
+    tanggal_kadaluarsa: "",
     deskripsi: "",
   })
   const [gambar, setGambar] = useState(null)
+  const [previewURL, setPreviewURL] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,7 +19,11 @@ export default function TambahObatModal({ onClose }) {
   }
 
   const handleFileChange = (e) => {
-    setGambar(e.target.files[0])
+    const file = e.target.files[0]
+    if (file) {
+      setGambar(file)
+      setPreviewURL(URL.createObjectURL(file)) // ⬅️ Tampilkan gambar yang dipilih
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -36,6 +40,9 @@ export default function TambahObatModal({ onClose }) {
         body: payload,
       })
       const data = await res.json()
+      console.log("🟡 STATUS:", res.status)
+      console.log("🟢 RESPONSE DARI SERVER:", data)
+
       if (res.ok) {
         alert("Obat berhasil ditambahkan")
         onClose()
@@ -43,6 +50,7 @@ export default function TambahObatModal({ onClose }) {
         alert(data.error || "Gagal menambahkan obat")
       }
     } catch (err) {
+      console.error("🔴 ERROR KIRIM:", err)
       alert("Terjadi kesalahan: " + err.message)
     }
   }
@@ -74,9 +82,15 @@ export default function TambahObatModal({ onClose }) {
           </select>
           <input name="stok" type="number" placeholder="Stok" value={formData.stok} onChange={handleChange} className="border rounded p-2" required />
           <input name="satuan" placeholder="Satuan (tablet, kapsul, dll)" value={formData.satuan} onChange={handleChange} className="border rounded p-2" required />
-          <input name="exp_date" type="month" value={formData.exp_date} onChange={handleChange} className="border rounded p-2" required />
+          <input name="tanggal_kadaluarsa" type="month" value={formData.tanggal_kadaluarsa} onChange={handleChange} className="border rounded p-2" required />
           <textarea name="deskripsi" placeholder="Deskripsi" value={formData.deskripsi} onChange={handleChange} className="border rounded p-2" />
+          
           <input type="file" accept="image/*" onChange={handleFileChange} className="border rounded p-2" />
+          
+          {previewURL && (
+            <img src={previewURL} alt="Preview" className="h-32 object-contain mt-2 border rounded" />
+          )}
+
           <button type="submit" className="bg-[#9747ff] text-white rounded p-2 mt-2">Simpan</button>
         </form>
       </div>

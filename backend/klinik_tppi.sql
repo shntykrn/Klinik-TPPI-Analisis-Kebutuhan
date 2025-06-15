@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 02:49 PM
+-- Generation Time: Jun 15, 2025 at 07:04 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,18 +41,18 @@ CREATE TABLE `diagnosis` (
 -- Table structure for table `obat`
 --
 
-CREATE TABLE obat (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nama_obat VARCHAR(100) NOT NULL,
-  stok INT DEFAULT 0,
-  satuan VARCHAR(50), -- opsional, misal: Tablet, Kapsul
-  tanggal_kadaluarsa DATE, -- ⬅️ INI untuk exp date
-  gambar VARCHAR(255), -- jika ingin simpan URL gambar
-  deskripsi TEXT,
-  dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
-  diperbarui_pada DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
+CREATE TABLE `obat` (
+  `id` int(11) NOT NULL,
+  `nama_obat` varchar(100) DEFAULT NULL,
+  `kategori` varchar(100) DEFAULT NULL,
+  `stok` int(11) DEFAULT 0,
+  `satuan` varchar(50) DEFAULT NULL,
+  `tanggal_kadaluarsa` date DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `dibuat_pada` datetime DEFAULT current_timestamp(),
+  `diperbarui_pada` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -76,6 +76,14 @@ CREATE TABLE `pasien` (
   `dibuat_pada` datetime DEFAULT current_timestamp(),
   `diperbarui_pada` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pasien`
+--
+
+INSERT INTO `pasien` (`id`, `nik`, `nama`, `pt_mitra`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `status_pekerja`, `no_telepon`, `alergi_obat`, `nama_penanggung_jawab`, `kontak_darurat`, `dibuat_pada`, `diperbarui_pada`) VALUES
+(1, 'q', 'q', 'OPTION 1', '2025-06-17', '', 'a', 'Organik', '1', '', 'a', '1', '2025-06-15 19:51:52', '2025-06-15 19:51:52'),
+(2, '1', 'a', 'OPTION 1', '2025-06-11', 'Laki-laki', 'a', 'Outsourcing', '1', 'a', 'a', '1', '2025-06-15 19:56:12', '2025-06-15 19:56:12');
 
 -- --------------------------------------------------------
 
@@ -110,6 +118,13 @@ CREATE TABLE `rekam_medis` (
   `dibuat_pada` datetime DEFAULT current_timestamp(),
   `diperbarui_pada` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `rekam_medis`
+--
+
+INSERT INTO `rekam_medis` (`id`, `id_pasien`, `tanggal_pemeriksaan`, `keluhan`, `tensi`, `suhu`, `nadi`, `respirasi`, `dibuat_pada`, `diperbarui_pada`) VALUES
+(1, 2, '2025-06-03', 'aa', '1/1', 1.0, 1, 1, '2025-06-15 22:13:38', '2025-06-15 22:13:38');
 
 -- --------------------------------------------------------
 
@@ -195,8 +210,6 @@ ALTER TABLE `riwayat_obat`
 ALTER TABLE `surat_sakit`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pasien` (`id_pasien`);
-  ALTER TABLE surat_sakit ADD gambar_url TEXT AFTER alasan;
-
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -218,7 +231,7 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
@@ -230,7 +243,7 @@ ALTER TABLE `pengguna`
 -- AUTO_INCREMENT for table `rekam_medis`
 --
 ALTER TABLE `rekam_medis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `riwayat_obat`
