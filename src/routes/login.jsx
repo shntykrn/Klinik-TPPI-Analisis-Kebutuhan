@@ -1,20 +1,43 @@
-import { useState } from "react"
-import { createLazyFileRoute } from "@tanstack/react-router"
-import { Form, Button } from "react-bootstrap"
-import { FaEye, FaEyeSlash } from "react-icons/fa"
-import logo from "../assets/logo-tppi.png"
-import bgImage from "../assets/bg-tppi.png"
+import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import logo from "../assets/logo-tppi.png";
+import bgImage from "../assets/bg-tppi.png";
 
-export const Route = createLazyFileRoute("/login")({
-  component: Login,
-})
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [nik, setNik] = useState('');
+  const [kataSandi, setKataSandi] = useState('');
+  const [loading, setLoading] = useState(false);
 
-const Login= () => {
-  const [showPassword, setShowPassword] = useState(false)
+  const togglePassword = () => setShowPassword(!showPassword);
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword)
-  }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:5000/api/pengguna/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nik, kata_sandi: kataSandi }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`Login berhasil! Selamat datang, ${data.user.nama}`);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/registrasi'; // arahkan ke halaman dashboard
+      } else {
+        alert(data.error || 'Login gagal');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan saat menghubungi server');
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div
@@ -29,18 +52,18 @@ const Login= () => {
       }}
     >
       <div className="d-flex flex-column align-items-center">
-        {/* Logo */}
         <div className="text-center mb-4">
-          <img src={logo || "/placeholder.svg"} alt="TPPI Logo" style={{ maxWidth: 150 }} />
+          <img src={logo} alt="TPPI Logo" style={{ maxWidth: 150 }} />
         </div>
 
-        {/* Login Form */}
         <div className="bg-white p-5" style={{ width: 600 }}>
-          <Form>
+          <Form onSubmit={handleLogin}>
             <Form.Group className="mb-4">
               <Form.Label style={{ color: "#6c757d", fontSize: "1.1rem" }}>NIK</Form.Label>
               <Form.Control
                 type="text"
+                value={nik}
+                onChange={(e) => setNik(e.target.value)}
                 style={{
                   border: "none",
                   borderBottom: "2px solid #dee2e6",
@@ -57,12 +80,13 @@ const Login= () => {
               <div
                 className="d-flex"
                 style={{
-                  border: "none",
                   borderBottom: "2px solid #dee2e6",
                 }}
               >
                 <Form.Control
                   type={showPassword ? "text" : "password"}
+                  value={kataSandi}
+                  onChange={(e) => setKataSandi(e.target.value)}
                   style={{
                     border: "none",
                     borderRadius: 0,
@@ -80,6 +104,7 @@ const Login= () => {
 
             <Button
               type="submit"
+              disabled={loading}
               style={{
                 backgroundColor: "#3a2a6d",
                 border: "none",
@@ -89,13 +114,13 @@ const Login= () => {
                 marginTop: "1rem",
               }}
             >
-              LOGIN
+              {loading ? "Logging in..." : "LOGIN"}
             </Button>
           </Form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;

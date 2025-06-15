@@ -1,9 +1,10 @@
+import React from "react"
 import { useState } from "react"
 import { Search, Plus, Filter, ChevronDown } from "lucide-react"
-import ObatCard from "@/components/ObatCard"
-import ObatDetailModal from "@/components/ObatDetailModal"
-import TambahObatModal from "@/components/TambahObatModal"
-import RiwayatStokModal from "@/components/RiwayatStokModal"
+import ObatCard from "../components/ObatCard"
+import ObatDetailModal from "../components/ObatDetailModal"
+import TambahObatModal from "../components/TambahObatModal"
+import RiwayatStokModal from "../components/RiwayatStokModal"
 
 // Data dummy (nanti bisa diganti dengan data dari API)
 const dummyMedicines = [

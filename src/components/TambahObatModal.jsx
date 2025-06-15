@@ -1,4 +1,5 @@
 // components/TambahObatModal.jsx
+import React from "react"
 import { X } from "lucide-react"
 import { useState } from "react"
 
