@@ -6,7 +6,16 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"), // alias `@` diarahkan ke folder `src`
+      "@": path.resolve(__dirname, "src"), 
+    },
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5173",
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

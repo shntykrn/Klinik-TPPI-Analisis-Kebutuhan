@@ -1,39 +1,35 @@
-import { useState } from "react"
-import { Search, ChevronDown, ChevronRight } from "lucide-react"
-
-const sampleVisits = [
-  {
-    date: "20 Januari 2024",
-    detail:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
-  },
-  {
-    date: "15 Januari 2024",
-    detail: "Catatan kontrol kedua pasien, kondisi membaik.",
-  },
-  {
-    date: "10 Januari 2024",
-    detail: "Pasien datang pertama kali dengan keluhan demam dan batuk.",
-  },
-]
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Search, ChevronDown, ChevronRight } from "lucide-react";
 
 const RekamMedisPage = () => {
-  const [selectedPatient, setSelectedPatient] = useState(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [activeTab, setActiveTab] = useState("riwayat")
-  const [expandedIndex, setExpandedIndex] = useState(null)
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("riwayat");
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [riwayatPemeriksaan, setRiwayatPemeriksaan] = useState([]);
 
   const patients = [
     { id: 1, name: "Muhammad Sumbul", nik: "00123847758402948", rekam: "001" },
     { id: 2, name: "Achmad Baihaqi", nik: "00133857758602745", rekam: "002" },
-  ]
+  ];
 
   const filtered = patients.filter(
     (p) =>
       p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.nik.includes(searchTerm) ||
       p.rekam.includes(searchTerm)
-  )
+  );
+
+  const fetchRiwayat = async (rekamId) => {
+    try {
+      const res = await axios.get(`/api/rekam-medis/${rekamId}`);
+      setRiwayatPemeriksaan(res.data);
+    } catch (err) {
+      console.error("Gagal mengambil rekam medis:", err);
+      setRiwayatPemeriksaan([]);
+    }
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -64,7 +60,10 @@ const RekamMedisPage = () => {
                   <td className="px-4 py-2">{p.name}</td>
                   <td className="px-4 py-2">
                     <button
-                      onClick={() => setSelectedPatient(p)}
+                      onClick={() => {
+                        setSelectedPatient(p);
+                        fetchRiwayat(p.rekam);
+                      }}
                       className="bg-[#cfc3ea] text-xs px-3 py-1 rounded-md"
                     >
                       LIHAT
@@ -99,20 +98,24 @@ const RekamMedisPage = () => {
 
           {activeTab === "riwayat" && (
             <div className="space-y-2">
-              {sampleVisits.map((visit, index) => (
-                <div key={index}>
-                  <button
-                    className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
-                    onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
-                  >
-                    <span>{visit.date}</span>
-                    {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
-                  </button>
-                  {expandedIndex === index && (
-                    <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.detail}</div>
-                  )}
-                </div>
-              ))}
+              {riwayatPemeriksaan.length === 0 ? (
+                <p className="text-center text-gray-600">Belum ada data rekam medis.</p>
+              ) : (
+                riwayatPemeriksaan.map((visit, index) => (
+                  <div key={index}>
+                    <button
+                      className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
+                      onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+                    >
+                      <span>{visit.tanggal}</span>
+                      {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
+                    </button>
+                    {expandedIndex === index && (
+                      <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.keterangan}</div>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           )}
 
@@ -151,7 +154,7 @@ const RekamMedisPage = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default RekamMedisPage
+export default RekamMedisPage;
