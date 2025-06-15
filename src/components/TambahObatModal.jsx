@@ -82,7 +82,7 @@ export default function TambahObatModal({ onClose }) {
           </select>
           <input name="stok" type="number" placeholder="Stok" value={formData.stok} onChange={handleChange} className="border rounded p-2" required />
           <input name="satuan" placeholder="Satuan (tablet, kapsul, dll)" value={formData.satuan} onChange={handleChange} className="border rounded p-2" required />
-          <input name="tanggal_kadaluarsa" type="month" value={formData.tanggal_kadaluarsa} onChange={handleChange} className="border rounded p-2" required />
+          <input name="tanggal_kadaluarsa" type="month" value={formData.tanggal_kadaluarsa} onChange={handleChange} className="border rounded p-2" />
           <textarea name="deskripsi" placeholder="Deskripsi" value={formData.deskripsi} onChange={handleChange} className="border rounded p-2" />
           
           <input type="file" accept="image/*" onChange={handleFileChange} className="border rounded p-2" />
