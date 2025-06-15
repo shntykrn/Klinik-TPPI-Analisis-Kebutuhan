@@ -71,3 +71,61 @@ VALUES (?, ?, ?, ?, ?, ?, ?)`,
     res.status(500).json({ error: 'Gagal tambah obat', detail: err.message });
   }
 };
+
+exports.tambahObatMasuk = async (req, res) => {
+  const id = req.params.id;
+  const { jumlah, keterangan } = req.body;
+
+  if (!jumlah || jumlah <= 0) {
+    return res.status(400).json({ error: "Jumlah harus lebih dari 0" });
+  }
+
+  try {
+    // Update stok
+    await db.query("UPDATE obat SET stok = stok + ? WHERE id = ?", [jumlah, id]);
+
+    // Catat ke riwayat
+    await db.query(
+      "INSERT INTO riwayat_obat (id_obat, jumlah, keterangan, jenis, tanggal) VALUES (?, ?, ?, 'masuk', NOW())",
+      [id, jumlah, keterangan]
+    );
+
+    res.json({ message: "Stok berhasil ditambahkan" });
+  } catch (err) {
+    console.error("❌ Gagal tambah obat:", err);
+    res.status(500).json({ error: "Gagal tambah stok obat" });
+  }
+};
+
+// Ambil stok obat (keluar) - Jika belum dibuat
+exports.ambilObatKeluar = async (req, res) => {
+  const id = req.params.id;
+  const { jumlah, keterangan } = req.body;
+
+  if (!jumlah || jumlah <= 0) {
+    return res.status(400).json({ error: "Jumlah tidak valid" });
+  }
+
+  try {
+    // Cek stok
+    const [obat] = await db.query("SELECT stok FROM obat WHERE id = ?", [id]);
+    if (obat.length === 0 || obat[0].stok < jumlah) {
+      return res.status(400).json({ error: "Stok tidak mencukupi" });
+    }
+
+    // Kurangi stok
+    await db.query("UPDATE obat SET stok = stok - ? WHERE id = ?", [jumlah, id]);
+
+    // Catat ke riwayat
+    await db.query(
+      "INSERT INTO riwayat_obat (id_obat, jumlah, keterangan, jenis, tanggal) VALUES (?, ?, ?, 'keluar', NOW())",
+      [id, jumlah, keterangan]
+    );
+
+    res.json({ message: "Obat berhasil diambil" });
+  } catch (err) {
+    console.error("❌ Gagal ambil obat:", err);
+    // Decrement the stock
+    res.status(500).json({ error: "Gagal ambil stok obat" });
+  }
+};    // Record the transaction in the history

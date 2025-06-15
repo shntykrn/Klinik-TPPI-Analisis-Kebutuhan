@@ -1,9 +1,7 @@
-// routes/riwayatObatRoutes.js
 const express = require('express');
 const router = express.Router();
-const riwayatObatController = require('../controllers/RiwayatObatController');
+const { getRiwayatObat } = require('../controllers/RiwayatObatController');
 
-router.get('/', riwayatObatController.getAllRiwayatObat);
-router.post('/', riwayatObatController.createRiwayatObat);
+router.get('/', getRiwayatObat);
 
 module.exports = router;
