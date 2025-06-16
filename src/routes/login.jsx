@@ -1,20 +1,34 @@
-import { useState } from "react"
+import { useState } from "react";
+import axios from "axios";
+import { Form, Button } from "react-bootstrap";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import logo from "./assets/logo-tppi.png";
+import bgImage from "./assets/bg-tppi.png";
 import { createLazyFileRoute } from "@tanstack/react-router"
-import { Form, Button } from "react-bootstrap"
-import { FaEye, FaEyeSlash } from "react-icons/fa"
-import logo from "../assets/logo-tppi.png"
-import bgImage from "../assets/bg-tppi.png"
 
 export const Route = createLazyFileRoute("/login")({
   component: Login,
 })
 
-const Login= () => {
-  const [showPassword, setShowPassword] = useState(false)
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [nik, setNik] = useState("");
+  const [password, setPassword] = useState("");
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword)
-  }
+  const togglePassword = () => setShowPassword(!showPassword);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/api/login", { nik, password });
+      alert("Login berhasil!");
+      console.log("Respon login:", res.data);
+      // Tambahkan redirect atau simpan token di sini jika diperlukan
+    } catch (err) {
+      alert("Login gagal.");
+      console.error("Login error:", err);
+    }
+  };
 
   return (
     <div
@@ -33,7 +47,8 @@ const Login= () => {
         <div className="text-center mb-4">
           <img src={logo || "/placeholder.svg"} alt="TPPI Logo" style={{ maxWidth: 150 }} />
         </div>
-
+        <div className="bg-white p-5" style={{ width: 600 }}>
+          <Form onSubmit={handleLogin}>
         {/* Login Form */}
         <div className="bg-white p-5" style={{ width: 600 }}>
           <Form>
@@ -41,6 +56,8 @@ const Login= () => {
               <Form.Label style={{ color: "#6c757d", fontSize: "1.1rem" }}>NIK</Form.Label>
               <Form.Control
                 type="text"
+                value={nik}
+                onChange={(e) => setNik(e.target.value)}
                 style={{
                   border: "none",
                   borderBottom: "2px solid #dee2e6",
@@ -56,6 +73,12 @@ const Login= () => {
               <Form.Label style={{ color: "#6c757d", fontSize: "1.1rem" }}>PASSWORD</Form.Label>
               <div
                 className="d-flex"
+                style={{ borderBottom: "2px solid #dee2e6" }}
+              >
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 style={{
                   border: "none",
                   borderBottom: "2px solid #dee2e6",
@@ -95,7 +118,8 @@ const Login= () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
+
