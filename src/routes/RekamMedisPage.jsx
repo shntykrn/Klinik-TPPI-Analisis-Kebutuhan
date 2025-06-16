@@ -1,40 +1,43 @@
-import React, { useEffect, useState } from "react"
-import { ChevronDown, ChevronRight, Eye, Trash2 } from "lucide-react"
+import React, { useEffect, useState } from "react";
+import { ChevronDown, ChevronRight, Eye, Trash2 } from "lucide-react";
 
 const RekamMedisPage = () => {
-  const [selectedPatient, setSelectedPatient] = useState(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [activeTab, setActiveTab] = useState("riwayat")
-  const [expandedIndex, setExpandedIndex] = useState(null)
-  const [patients, setPatients] = useState([])
-  const [riwayat, setRiwayat] = useState([])
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("riwayat");
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [riwayat, setRiwayat] = useState([]);
 
-  const [tanggalPemeriksaan, setTanggalPemeriksaan] = useState("")
-  const [keluhan, setKeluhan] = useState("")
-  const [tensiAtas, setTensiAtas] = useState("")
-  const [tensiBawah, setTensiBawah] = useState("")
-  const [suhu, setSuhu] = useState("")
-  const [nadi, setNadi] = useState("")
-  const [respirasi, setRespirasi] = useState("")
+  const [tanggalPemeriksaan, setTanggalPemeriksaan] = useState("");
+  const [keluhan, setKeluhan] = useState("");
+  const [tensiAtas, setTensiAtas] = useState("");
+  const [tensiBawah, setTensiBawah] = useState("");
+  const [suhu, setSuhu] = useState("");
+  const [nadi, setNadi] = useState("");
+  const [respirasi, setRespirasi] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/pasien")
       .then((res) => res.json())
       .then((data) => setPatients(data))
-      .catch((err) => console.error("Gagal fetch pasien", err))
-  }, [])
+      .catch((err) => console.error("Gagal fetch pasien", err));
+  }, []);
 
   const fetchRiwayat = (id) => {
     fetch("http://localhost:5000/api/rekam-medis/get")
       .then((res) => res.json())
-      .then((data) => setRiwayat(data.filter((item) => item.id_pasien === id)))
-  }
+      .then((data) => {
+        const riwayatPasien = data.filter((item) => item.id_pasien === id);
+        setRiwayat(riwayatPasien);
+      });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!selectedPatient || !tanggalPemeriksaan) {
-      alert("Mohon lengkapi data")
-      return
+      alert("Mohon lengkapi data");
+      return;
     }
 
     try {
@@ -50,50 +53,52 @@ const RekamMedisPage = () => {
           nadi,
           respirasi,
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
       if (res.ok) {
-        alert("Rekam medis berhasil disimpan")
-        setTanggalPemeriksaan("")
-        setKeluhan("")
-        setTensiAtas("")
-        setTensiBawah("")
-        setSuhu("")
-        setNadi("")
-        setRespirasi("")
-        setActiveTab("riwayat")
-        fetchRiwayat(selectedPatient.id)
+        alert("Rekam medis berhasil disimpan");
+        setTanggalPemeriksaan("");
+        setKeluhan("");
+        setTensiAtas("");
+        setTensiBawah("");
+        setSuhu("");
+        setNadi("");
+        setRespirasi("");
+        setActiveTab("riwayat");
+        fetchRiwayat(selectedPatient.id);
       } else {
-        alert(data.error || "Gagal menyimpan")
+        alert(data.error || "Gagal menyimpan");
       }
     } catch (err) {
-      alert("Error: " + err.message)
+      alert("Error: " + err.message);
     }
-  }
+  };
 
   const handleDeletePasien = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus pasien ini?")) return
+    if (!window.confirm("Yakin ingin menghapus pasien ini?")) return;
     try {
       const res = await fetch(`http://localhost:5000/api/pasien/delete/${id}`, {
         method: "DELETE",
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
       if (res.ok) {
-        alert("Pasien berhasil dihapus")
-        setPatients(patients.filter((p) => p.id !== id))
+        alert("Pasien berhasil dihapus");
+        setPatients(patients.filter((p) => p.id !== id));
+        setSelectedPatient(null);
       } else {
-        alert(data.error || "Gagal menghapus pasien")
+        alert(data.error || "Gagal menghapus pasien");
       }
     } catch (err) {
-      alert("Gagal menghapus pasien: " + err.message)
+      alert("Gagal menghapus pasien: " + err.message);
     }
-  }
+  };
 
   const filtered = patients.filter(
     (p) =>
       p.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.nik.includes(searchTerm)
+  );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -125,26 +130,18 @@ const RekamMedisPage = () => {
                   <td className="px-4 py-2 text-right space-x-2">
                     <button
                       onClick={() => {
-                        setSelectedPatient(p)
-                        fetchRiwayat(p.id)
+                        setSelectedPatient(p);
+                        fetchRiwayat(p.id);
                       }}
                       className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
                     >
                       <Eye className="w-4 h-4" />
-                      {/* Lihat */}
                     </button>
                     <button
                       onClick={() => handleDeletePasien(p.id)}
                       className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
-                      onClick={() => {
-                        setSelectedPatient(p);
-                        fetchRiwayat(p.rekam);
-                      }}
-                      className="bg-[#cfc3ea] text-xs px-3 py-1 rounded-md"
-
                     >
                       <Trash2 className="w-4 h-4" />
-                      {/* Hapus */}
                     </button>
                   </td>
                 </tr>
@@ -154,7 +151,9 @@ const RekamMedisPage = () => {
         </>
       ) : (
         <>
-          <h2 className="text-center text-xl font-semibold mb-4">REKAM MEDIS</h2>
+          <h2 className="text-center text-xl font-semibold mb-4">
+            REKAM MEDIS: {selectedPatient.nama}
+          </h2>
           <div className="flex justify-center gap-8 border-b mb-6">
             <button
               className={`pb-2 border-b-2 ${
@@ -180,60 +179,40 @@ const RekamMedisPage = () => {
 
           {activeTab === "riwayat" && (
             <div className="space-y-2">
-              {riwayat.map((visit, index) => (
-                <div key={index}>
-                    <button
-                      className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
-                      onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
-                    >
-                      <span>{visit.tanggal}</span>
-                      {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
-                    </button>
-                    {expandedIndex === index && (
-                      <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.keterangan}</div>
-                    )}
-                  </div>
-                ))
-              {riwayatPemeriksaan.length === 0 ? (
-                <p className="text-center text-gray-600">Belum ada data rekam medis.</p>
+              {riwayat.length === 0 ? (
+                <p className="text-center text-gray-600">
+                  Belum ada data rekam medis.
+                </p>
               ) : (
-                riwayatPemeriksaan.map((visit, index) => (
+                riwayat.map((visit, index) => (
                   <div key={index}>
                     <button
                       className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
-                      onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+                      onClick={() =>
+                        setExpandedIndex(
+                          index === expandedIndex ? null : index
+                        )
+                      }
                     >
-                      <span>{visit.tanggal}</span>
-                      {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
+                      <span>{visit.tanggal_pemeriksaan}</span>
+                      {expandedIndex === index ? (
+                        <ChevronDown />
+                      ) : (
+                        <ChevronRight />
+                      )}
                     </button>
                     {expandedIndex === index && (
-                      <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.keterangan}</div>
+                      <div className="bg-[#3b2772] text-white p-4 text-sm">
+                        <p><b>Keluhan:</b> {visit.keluhan}</p>
+                        <p><b>Tensi:</b> {visit.tensi} mmHg</p>
+                        <p><b>Suhu:</b> {visit.suhu} °C</p>
+                        <p><b>Nadi:</b> {visit.nadi} kali/menit</p>
+                        <p><b>Respirasi:</b> {visit.respirasi} kali/menit</p>
+                      </div>
                     )}
                   </div>
                 ))
               )}
-              {sampleVisits.map((visit, index) => (
-                <div key={index}>
-                  <button
-                    className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
-                    onClick={() =>
-                      setExpandedIndex(index === expandedIndex ? null : index)
-                    }
-                  >
-                    <span>{visit.tanggal_pemeriksaan}</span>
-                    {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
-                  </button>
-                  {expandedIndex === index && (
-                    <div className="bg-[#3b2772] text-white p-4 text-sm">
-                      <p><b>Keluhan:</b> {visit.keluhan}</p>
-                      <p><b>Tensi:</b> {visit.tensi} mmHg</p>
-                      <p><b>Suhu:</b> {visit.suhu} °C</p>
-                      <p><b>Nadi:</b> {visit.nadi} kali/menit</p>
-                      <p><b>Respirasi:</b> {visit.respirasi} kali/menit</p>
-                    </div>
-                  )}
-                </div>
-              ))}
             </div>
           )}
 
@@ -268,7 +247,7 @@ const RekamMedisPage = () => {
                   className="col-span-1 border p-2"
                   value={tensiBawah}
                   onChange={(e) => setTensiBawah(e.target.value)}
-                />{" "}
+                />
                 mmHg
               </div>
               <div className="grid grid-cols-5 items-center gap-2">
@@ -277,7 +256,7 @@ const RekamMedisPage = () => {
                   className="col-span-1 border p-2"
                   value={suhu}
                   onChange={(e) => setSuhu(e.target.value)}
-                />{" "}
+                />
                 °C
               </div>
               <div className="grid grid-cols-5 items-center gap-2">
@@ -286,7 +265,7 @@ const RekamMedisPage = () => {
                   className="col-span-1 border p-2"
                   value={nadi}
                   onChange={(e) => setNadi(e.target.value)}
-                />{" "}
+                />
                 kali/menit
               </div>
               <div className="grid grid-cols-5 items-center gap-2">
@@ -295,7 +274,7 @@ const RekamMedisPage = () => {
                   className="col-span-1 border p-2"
                   value={respirasi}
                   onChange={(e) => setRespirasi(e.target.value)}
-                />{" "}
+                />
                 kali/menit
               </div>
               <button
@@ -313,4 +292,3 @@ const RekamMedisPage = () => {
 };
 
 export default RekamMedisPage;
-

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useState } from "react";
 import axios from "axios";
 import logo from "../assets/logo-tppi.png";
 import mascot from "../assets/mascot.png";
@@ -26,30 +25,6 @@ const LandingRegister = () => {
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
-
-const handleSubmit = async () => {
-  console.log("DATA TERKIRIM:", formData); 
-
-  try {
-    const res = await fetch("http://localhost:5000/api/pengguna/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert(data.message);
-      setStep("landing");
-    } else {
-      alert(data.error || "Gagal registrasi");
-    }
-  } catch (error) {
-    alert("Terjadi kesalahan: " + error.message);
-  }
-};
 
   const resetForm = () => {
     setFormData({
@@ -79,9 +54,6 @@ const handleSubmit = async () => {
       console.error("Registrasi gagal:", err);
       alert("Terjadi kesalahan saat mengirim data.");
     }
-  const handleSubmit = () => {
-    alert("Registrasi berhasil!");
-    console.log(formData);
   };
 
   if (step === "landing") {
@@ -152,20 +124,28 @@ const handleSubmit = async () => {
           }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
             <label className="block font-semibold mb-1">NIK</label>
-            <input type="text" value={formData.nik} onChange={(e) => handleInputChange("nik", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="text"
+              value={formData.nik}
+              onChange={(e) => handleInputChange("nik", e.target.value)}
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Nama</label>
-            <input type="text" value={formData.nama} onChange={(e) => handleInputChange("nama", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="text"
+              value={formData.nama}
+              onChange={(e) => handleInputChange("nama", e.target.value)}
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Departemen</label>
-            <select value={formData.departemen} onChange={(e) => handleInputChange("departemen", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded">
             <select
               value={formData.departemen}
               onChange={(e) => handleInputChange("departemen", e.target.value)}
@@ -176,28 +156,32 @@ const handleSubmit = async () => {
               <option>Produksi</option>
               <option>Keuangan</option>
               <option>IT</option>
-              <option>-- Pilih --</option>
-              <option>OPTION 1</option>
-              <option>OPTION 2</option>
             </select>
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Tanggal Lahir</label>
-            <input type="date" value={formData.tanggalLahir} onChange={(e) => handleInputChange("tanggalLahir", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="date"
+              value={formData.tanggalLahir}
+              onChange={(e) =>
+                handleInputChange("tanggalLahir", e.target.value)
+              }
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Jenis Kelamin</label>
             <div className="flex gap-6 mt-2">
-              <label><input type="radio" name="gender" value="Laki-laki" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />LAKI-LAKI</label>
-              <label><input type="radio" name="gender" value="Perempuan" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />PEREMPUAN</label>
               <label>
                 <input
                   type="radio"
                   name="gender"
-                  value="laki-laki"
-                  onChange={(e) => handleInputChange("jenisKelamin", e.target.value)}
+                  value="Laki-laki"
+                  onChange={(e) =>
+                    handleInputChange("jenisKelamin", e.target.value)
+                  }
                   className="mr-2"
                 />
                 LAKI-LAKI
@@ -206,14 +190,14 @@ const handleSubmit = async () => {
                 <input
                   type="radio"
                   name="gender"
-                  value="perempuan"
-                  onChange={(e) => handleInputChange("jenisKelamin", e.target.value)}
+                  value="Perempuan"
+                  onChange={(e) =>
+                    handleInputChange("jenisKelamin", e.target.value)
+                  }
                   className="mr-2"
                 />
                 PEREMPUAN
               </label>
-              <label><input type="radio" name="gender" value="laki-laki" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />LAKI-LAKI</label>
-              <label><input type="radio" name="gender" value="perempuan" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />PEREMPUAN</label>
             </div>
           </div>
 
@@ -225,7 +209,9 @@ const handleSubmit = async () => {
                   type="radio"
                   name="status"
                   value="nikah"
-                  onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("statusPerkawinan", e.target.value)
+                  }
                   className="mr-2"
                 />
                 NIKAH
@@ -235,29 +221,43 @@ const handleSubmit = async () => {
                   type="radio"
                   name="status"
                   value="belum"
-                  onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("statusPerkawinan", e.target.value)
+                  }
                   className="mr-2"
                 />
                 BELUM
               </label>
-              <label><input type="radio" name="status" value="nikah" onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)} className="mr-2" />NIKAH</label>
-              <label><input type="radio" name="status" value="belum" onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)} className="mr-2" />BELUM</label>
             </div>
           </div>
 
           <div className="md:col-span-2">
             <label className="block font-semibold mb-1">Alamat</label>
-            <textarea value={formData.alamat} onChange={(e) => handleInputChange("alamat", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <textarea
+              value={formData.alamat}
+              onChange={(e) => handleInputChange("alamat", e.target.value)}
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Status Pekerja</label>
-            <input type="text" value={formData.statusPekerja} readOnly className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="text"
+              value={formData.statusPekerja}
+              readOnly
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">No Telepon</label>
-            <input type="text" value={formData.noTelepon} onChange={(e) => handleInputChange("noTelepon", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="text"
+              value={formData.noTelepon}
+              onChange={(e) => handleInputChange("noTelepon", e.target.value)}
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div className="md:col-span-2">
@@ -268,7 +268,9 @@ const handleSubmit = async () => {
                   type="radio"
                   name="alergi"
                   value="iya"
-                  onChange={(e) => handleInputChange("alergiObat", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("alergiObat", e.target.value)
+                  }
                   className="mr-2"
                 />
                 IYA
@@ -278,31 +280,58 @@ const handleSubmit = async () => {
                   type="radio"
                   name="alergi"
                   value="tidak"
-                  onChange={(e) => handleInputChange("alergiObat", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("alergiObat", e.target.value)
+                  }
                   className="mr-2"
                 />
                 TIDAK
               </label>
-              <label><input type="radio" name="alergi" value="iya" onChange={(e) => handleInputChange("alergiObat", e.target.value)} className="mr-2" />IYA</label>
-              <label><input type="radio" name="alergi" value="tidak" onChange={(e) => handleInputChange("alergiObat", e.target.value)} className="mr-2" />TIDAK</label>
             </div>
             {formData.alergiObat === "iya" && (
-              <input type="text" placeholder="Detail Alergi" value={formData.alergiDetail} onChange={(e) => handleInputChange("alergiDetail", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 mt-2 rounded" />
+              <input
+                type="text"
+                placeholder="Detail Alergi"
+                value={formData.alergiDetail}
+                onChange={(e) =>
+                  handleInputChange("alergiDetail", e.target.value)
+                }
+                className="w-full border-2 border-purple-700 bg-gray-100 p-2 mt-2 rounded"
+              />
             )}
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Nama Penanggung Jawab</label>
-            <input type="text" value={formData.namaPenanggungJawab} onChange={(e) => handleInputChange("namaPenanggungJawab", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <label className="block font-semibold mb-1">
+              Nama Penanggung Jawab
+            </label>
+            <input
+              type="text"
+              value={formData.namaPenanggungJawab}
+              onChange={(e) =>
+                handleInputChange("namaPenanggungJawab", e.target.value)
+              }
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Emergency Contact</label>
-            <input type="text" value={formData.emergencyContact} onChange={(e) => handleInputChange("emergencyContact", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded" />
+            <input
+              type="text"
+              value={formData.emergencyContact}
+              onChange={(e) =>
+                handleInputChange("emergencyContact", e.target.value)
+              }
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            />
           </div>
 
           <div className="md:col-span-2 text-center">
-            <button type="submit" className="bg-purple-800 text-white font-bold py-2 px-10 rounded hover:bg-purple-900">
+            <button
+              type="submit"
+              className="bg-purple-800 text-white font-bold py-2 px-10 rounded hover:bg-purple-900"
+            >
               SUBMIT
             </button>
           </div>
