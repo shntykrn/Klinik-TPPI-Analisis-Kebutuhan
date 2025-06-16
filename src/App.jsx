@@ -1,36 +1,46 @@
-import { Suspense, lazy } from "react"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import LoadingSpinner from "./components/LoadingSpinner"
-import Navbar from './components/NavBar';
+import React from "react";
+import { Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LoadingSpinner from "./components/LoadingSpinner";
 import Layout from "./components/Layout";
-
-// Lazy load pages
-const LoginPage = lazy(() => import("./routes/login"))
-const RegisterPage = lazy(() => import("./routes/LandingRegister"))
-const RekamMedisPage = lazy(() => import("./routes/RekamMedisPage"))
-const SuratSakitPage = lazy(() => import("./routes/SuratSakitPage"))
-const StokObatPage = lazy(() => import("./routes/StokObatPage"))
+import Login from "./routes/Login";
+import LandingRegister from "./routes/LandingRegister";
+import RekamMedisPage from "./routes/RekamMedisPage";
+import SuratSakitPage from "./routes/SuratSakitPage";
+import BuatSurat from "./routes/BuatSuratSakit";
+import LihatSurat from "./routes/LihatSurat";
+import CetakSurat from "./routes/CetakSurat";
+import UnduhSurat from "./routes/UnduhSurat"; 
+import StokObatPage from "./routes/StokObatPage";
 
 function App() {
   return (
     <Router>
-      <Navbar />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/landing" element={<RegisterPage />} />
+          {/* Redirect "/" ke /login */}
+          <Route index element={<Navigate to="/login" replace />} />
 
-          {/* Protected routes with Layout */}
+          {/* Login page tanpa Navbar */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Halaman setelah login — dengan Navbar di dalam Layout */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/rekam-medis" replace />} />
+            <Route path="registrasi" element={<LandingRegister />} />
             <Route path="rekam-medis" element={<RekamMedisPage />} />
             <Route path="surat-sakit" element={<SuratSakitPage />} />
             <Route path="stok-obat" element={<StokObatPage />} />
+
+            {/* Route untuk surat izin */}
+            <Route path="buat-surat" element={<BuatSurat />} />
+            <Route path="lihat-surat/:id" element={<LihatSurat />} />
+            <Route path="cetak-surat/:id" element={<CetakSurat />} />
+            <Route path="unduh-surat/:id" element={<UnduhSurat />} />
           </Route>
         </Routes>
       </Suspense>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

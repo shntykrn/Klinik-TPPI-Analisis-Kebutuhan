@@ -1,17 +1,16 @@
-import { Outlet } from "react-router-dom"
-import Header from "./Header"
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "./NavBar";
 
 const Layout = () => {
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="flex-1">
-        <Header />
-        <main className="p-6">
-          <Outlet />
-        </main>
-      </div>
-    </div>
-  )
-}
+    <>
+      <Navbar />
+      <main className="pt-20"> {/* Padding top agar isi tidak ketimpa navbar */}
+        <Outlet />
+      </main>
+    </>
+  );
+};
 
-export default Layout
+export default Layout;
