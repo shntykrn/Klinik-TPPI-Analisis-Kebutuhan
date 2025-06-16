@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner";
 import Layout from "./components/Layout";
-import Login from "./routes/Login";
+import Login from "./routes/login";
 import LandingRegister from "./routes/LandingRegister";
 import RekamMedisPage from "./routes/RekamMedisPage";
 import SuratSakitPage from "./routes/SuratSakitPage";
