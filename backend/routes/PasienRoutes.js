@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const pasienController = require("../controllers/PasienController");
+const { getPasienByIdOrNik } = require("../controllers/PasienController");
 
 router.get("/", async (req, res) => {
   try {
@@ -12,5 +13,6 @@ router.get("/", async (req, res) => {
   }
 });
 router.delete("/delete/:id", pasienController.deletePasien);
+router.get("/pasien/:key", getPasienByIdOrNik);
 
 module.exports = router;

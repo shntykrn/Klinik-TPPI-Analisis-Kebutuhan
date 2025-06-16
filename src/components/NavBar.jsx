@@ -15,7 +15,7 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow">
+    <nav className="print:hidden fixed top-0 left-0 w-full z-50 bg-white shadow">
       <div className="container mx-auto px-4 flex items-center justify-between h-20">
         {/* Logo */}
         <Link to="/registrasi">

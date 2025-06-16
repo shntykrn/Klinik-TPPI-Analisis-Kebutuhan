@@ -10,6 +10,25 @@ exports.getAllPasien = async (req, res) => {
   }
 };
 
+exports.getPasienByIdOrNik = async (req, res) => {
+  const { key } = req.params;
+
+  try {
+    const [rows] = await db.execute(
+      'SELECT id_pasien, nama, nik FROM pasien WHERE id_pasien = ? OR nik = ? LIMIT 1',
+      [key, key]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Pasien tidak ditemukan' });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error', detail: err.message });
+  }
+};
+
 exports.createPasien = async (req, res) => {
   const {
     nik,

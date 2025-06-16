@@ -7,6 +7,7 @@ const rekamMedisRoutes = require('./routes/RekamMedisRoutes');
 const pasienRoutes = require('./routes/PasienRoutes');
 const obatRoutes = require('./routes/ObatRoutes');
 const riwayatRoutes = require('./routes/RiwayatObatRoutes');
+const suratSakitRoutes = require('./routes/SuratSakitRoutes');
 const path = require('path');
 
 const db = require('./config/db'); 
@@ -24,6 +25,7 @@ app.use('/api/rekam-medis', rekamMedisRoutes);
 app.use('/api/pasien', pasienRoutes);
 app.use('/api/obat', obatRoutes);
 app.use('/api/riwayat-obat', riwayatRoutes);
+app.use('/api/surat-sakit', suratSakitRoutes);
 
 // Test DB connection
 db.getConnection()
