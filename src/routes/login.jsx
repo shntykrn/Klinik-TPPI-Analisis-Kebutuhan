@@ -4,6 +4,11 @@ import { Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "./assets/logo-tppi.png";
 import bgImage from "./assets/bg-tppi.png";
+import { createLazyFileRoute } from "@tanstack/react-router"
+
+export const Route = createLazyFileRoute("/login")({
+  component: Login,
+})
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,12 +43,15 @@ const Login = () => {
       }}
     >
       <div className="d-flex flex-column align-items-center">
+        {/* Logo */}
         <div className="text-center mb-4">
           <img src={logo || "/placeholder.svg"} alt="TPPI Logo" style={{ maxWidth: 150 }} />
         </div>
-
         <div className="bg-white p-5" style={{ width: 600 }}>
           <Form onSubmit={handleLogin}>
+        {/* Login Form */}
+        <div className="bg-white p-5" style={{ width: 600 }}>
+          <Form>
             <Form.Group className="mb-4">
               <Form.Label style={{ color: "#6c757d", fontSize: "1.1rem" }}>NIK</Form.Label>
               <Form.Control
@@ -71,6 +79,13 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  border: "none",
+                  borderBottom: "2px solid #dee2e6",
+                }}
+              >
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
                   style={{
                     border: "none",
                     borderRadius: 0,
@@ -107,3 +122,4 @@ const Login = () => {
 };
 
 export default Login;
+

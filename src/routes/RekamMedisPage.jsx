@@ -8,11 +8,8 @@ const RekamMedisPage = () => {
   const [activeTab, setActiveTab] = useState("riwayat");
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [riwayatPemeriksaan, setRiwayatPemeriksaan] = useState([]);
-
-  const patients = [
-    { id: 1, name: "Muhammad Sumbul", nik: "00123847758402948", rekam: "001" },
-    { id: 2, name: "Achmad Baihaqi", nik: "00133857758602745", rekam: "002" },
-  ];
+import { useState } from "react"
+import { Search, ChevronDown, ChevronRight } from "lucide-react"
 
   const filtered = patients.filter(
     (p) =>
@@ -30,6 +27,8 @@ const RekamMedisPage = () => {
       setRiwayatPemeriksaan([]);
     }
   };
+
+  )
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -64,6 +63,7 @@ const RekamMedisPage = () => {
                         setSelectedPatient(p);
                         fetchRiwayat(p.rekam);
                       }}
+                      onClick={() => setSelectedPatient(p)}
                       className="bg-[#cfc3ea] text-xs px-3 py-1 rounded-md"
                     >
                       LIHAT
@@ -116,6 +116,20 @@ const RekamMedisPage = () => {
                   </div>
                 ))
               )}
+              {sampleVisits.map((visit, index) => (
+                <div key={index}>
+                  <button
+                    className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
+                    onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+                  >
+                    <span>{visit.date}</span>
+                    {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
+                  </button>
+                  {expandedIndex === index && (
+                    <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.detail}</div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
 
@@ -158,3 +172,7 @@ const RekamMedisPage = () => {
 };
 
 export default RekamMedisPage;
+  )
+}
+
+export default RekamMedisPage
