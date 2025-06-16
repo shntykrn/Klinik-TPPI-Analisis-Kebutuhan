@@ -2,16 +2,18 @@ import { useState } from "react";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "./assets/logo-tppi.png";
-import bgImage from "./assets/bg-tppi.png";
-import { createLazyFileRoute } from "@tanstack/react-router"
+import logo from "../assets/logo-tppi.png";
+import bgImage from "../assets/bg-tppi.png";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [nik, setNik] = useState('');
   const [kataSandi, setKataSandi] = useState('');
   const [loading, setLoading] = useState(false);
+
   const togglePassword = () => setShowPassword(!showPassword);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -28,7 +30,7 @@ const Login = () => {
       if (res.ok) {
         alert(`Login berhasil! Selamat datang, ${data.user.nama}`);
         localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/registrasi'; // arahkan ke halaman dashboard
+        window.location.href = '/registrasi';
       } else {
         alert(data.error || 'Login gagal');
       }
@@ -55,7 +57,7 @@ const Login = () => {
         <div className="text-center mb-4">
           <img src={logo} alt="TPPI Logo" style={{ maxWidth: 150 }} />
         </div>
-        
+
         <div className="bg-white p-5" style={{ width: 600 }}>
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-4">
@@ -78,16 +80,8 @@ const Login = () => {
             <Form.Group className="mb-5">
               <Form.Label style={{ color: "#6c757d", fontSize: "1.1rem" }}>PASSWORD</Form.Label>
               <div
-                className="d-flex"
+                className="d-flex align-items-center"
                 style={{ borderBottom: "2px solid #dee2e6" }}
-              >
-                <Form.Control
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  borderBottom: "2px solid #dee2e6",
-                }}
               >
                 <Form.Control
                   type={showPassword ? "text" : "password"}
@@ -102,7 +96,15 @@ const Login = () => {
                     boxShadow: "none",
                   }}
                 />
-                <Button variant="link" onClick={togglePassword} style={{ border: "none", boxShadow: "none" }}>
+                <Button
+                  variant="link"
+                  onClick={togglePassword}
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    color: "#3a2a6d",
+                  }}
+                >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </Button>
               </div>

@@ -46,7 +46,7 @@ const LandingRegister = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("/api/registrasi", formData);
+      await axios.post("http://localhost:5000/api/pengguna/registrasi", formData);
       alert("Registrasi berhasil!");
       resetForm();
       setStep("landing");
