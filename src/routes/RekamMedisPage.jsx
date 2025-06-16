@@ -94,7 +94,6 @@ const RekamMedisPage = () => {
     (p) =>
       p.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.nik.includes(searchTerm)
-  )
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -137,6 +136,12 @@ const RekamMedisPage = () => {
                     <button
                       onClick={() => handleDeletePasien(p.id)}
                       className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
+                      onClick={() => {
+                        setSelectedPatient(p);
+                        fetchRiwayat(p.rekam);
+                      }}
+                      className="bg-[#cfc3ea] text-xs px-3 py-1 rounded-md"
+
                     >
                       <Trash2 className="w-4 h-4" />
                       {/* Hapus */}
@@ -176,6 +181,38 @@ const RekamMedisPage = () => {
           {activeTab === "riwayat" && (
             <div className="space-y-2">
               {riwayat.map((visit, index) => (
+                <div key={index}>
+                    <button
+                      className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
+                      onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+                    >
+                      <span>{visit.tanggal}</span>
+                      {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
+                    </button>
+                    {expandedIndex === index && (
+                      <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.keterangan}</div>
+                    )}
+                  </div>
+                ))
+              {riwayatPemeriksaan.length === 0 ? (
+                <p className="text-center text-gray-600">Belum ada data rekam medis.</p>
+              ) : (
+                riwayatPemeriksaan.map((visit, index) => (
+                  <div key={index}>
+                    <button
+                      className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
+                      onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+                    >
+                      <span>{visit.tanggal}</span>
+                      {expandedIndex === index ? <ChevronDown /> : <ChevronRight />}
+                    </button>
+                    {expandedIndex === index && (
+                      <div className="bg-[#3b2772] text-white p-4 text-sm">{visit.keterangan}</div>
+                    )}
+                  </div>
+                ))
+              )}
+              {sampleVisits.map((visit, index) => (
                 <div key={index}>
                   <button
                     className="w-full flex justify-between items-center bg-gray-300 px-4 py-3"
@@ -272,7 +309,8 @@ const RekamMedisPage = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default RekamMedisPage
+export default RekamMedisPage;
+

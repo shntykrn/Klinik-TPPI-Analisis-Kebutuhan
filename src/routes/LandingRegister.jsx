@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import logo from "../assets/logo-tppi.png";
 import mascot from "../assets/mascot.png";
 import bg from "../assets/bg-tppi.png";
@@ -26,7 +28,7 @@ const LandingRegister = () => {
   };
 
 const handleSubmit = async () => {
-  console.log("DATA TERKIRIM:", formData); // ⬅️ tambahkan ini
+  console.log("DATA TERKIRIM:", formData); 
 
   try {
     const res = await fetch("http://localhost:5000/api/pengguna/register", {
@@ -49,6 +51,38 @@ const handleSubmit = async () => {
   }
 };
 
+  const resetForm = () => {
+    setFormData({
+      nik: "",
+      nama: "",
+      departemen: "",
+      tanggalLahir: "",
+      jenisKelamin: "",
+      statusPerkawinan: "",
+      alamat: "",
+      statusPekerja: "",
+      noTelepon: "",
+      alergiObat: "",
+      alergiDetail: "",
+      namaPenanggungJawab: "",
+      emergencyContact: "",
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post("/api/registrasi", formData);
+      alert("Registrasi berhasil!");
+      resetForm();
+      setStep("landing");
+    } catch (err) {
+      console.error("Registrasi gagal:", err);
+      alert("Terjadi kesalahan saat mengirim data.");
+    }
+  const handleSubmit = () => {
+    alert("Registrasi berhasil!");
+    console.log(formData);
+  };
 
   if (step === "landing") {
     return (
@@ -111,6 +145,13 @@ const handleSubmit = async () => {
           <h2 className="text-2xl font-bold uppercase">REGISTRASI PASIEN</h2>
         </div>
 
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
         <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
             <label className="block font-semibold mb-1">NIK</label>
@@ -125,6 +166,16 @@ const handleSubmit = async () => {
           <div>
             <label className="block font-semibold mb-1">Departemen</label>
             <select value={formData.departemen} onChange={(e) => handleInputChange("departemen", e.target.value)} className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded">
+            <select
+              value={formData.departemen}
+              onChange={(e) => handleInputChange("departemen", e.target.value)}
+              className="w-full border-2 border-purple-700 bg-gray-100 p-2 rounded"
+            >
+              <option value="">-- Pilih --</option>
+              <option>HR</option>
+              <option>Produksi</option>
+              <option>Keuangan</option>
+              <option>IT</option>
               <option>-- Pilih --</option>
               <option>OPTION 1</option>
               <option>OPTION 2</option>
@@ -141,12 +192,54 @@ const handleSubmit = async () => {
             <div className="flex gap-6 mt-2">
               <label><input type="radio" name="gender" value="Laki-laki" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />LAKI-LAKI</label>
               <label><input type="radio" name="gender" value="Perempuan" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />PEREMPUAN</label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="laki-laki"
+                  onChange={(e) => handleInputChange("jenisKelamin", e.target.value)}
+                  className="mr-2"
+                />
+                LAKI-LAKI
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="perempuan"
+                  onChange={(e) => handleInputChange("jenisKelamin", e.target.value)}
+                  className="mr-2"
+                />
+                PEREMPUAN
+              </label>
+              <label><input type="radio" name="gender" value="laki-laki" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />LAKI-LAKI</label>
+              <label><input type="radio" name="gender" value="perempuan" onChange={(e) => handleInputChange("jenisKelamin", e.target.value)} className="mr-2" />PEREMPUAN</label>
             </div>
           </div>
 
           <div>
             <label className="block font-semibold mb-1">Status Perkawinan</label>
             <div className="flex gap-6 mt-2">
+              <label>
+                <input
+                  type="radio"
+                  name="status"
+                  value="nikah"
+                  onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)}
+                  className="mr-2"
+                />
+                NIKAH
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="status"
+                  value="belum"
+                  onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)}
+                  className="mr-2"
+                />
+                BELUM
+              </label>
               <label><input type="radio" name="status" value="nikah" onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)} className="mr-2" />NIKAH</label>
               <label><input type="radio" name="status" value="belum" onChange={(e) => handleInputChange("statusPerkawinan", e.target.value)} className="mr-2" />BELUM</label>
             </div>
@@ -170,6 +263,26 @@ const handleSubmit = async () => {
           <div className="md:col-span-2">
             <label className="block font-semibold mb-1">Alergi Obat</label>
             <div className="flex gap-6 mt-2">
+              <label>
+                <input
+                  type="radio"
+                  name="alergi"
+                  value="iya"
+                  onChange={(e) => handleInputChange("alergiObat", e.target.value)}
+                  className="mr-2"
+                />
+                IYA
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="alergi"
+                  value="tidak"
+                  onChange={(e) => handleInputChange("alergiObat", e.target.value)}
+                  className="mr-2"
+                />
+                TIDAK
+              </label>
               <label><input type="radio" name="alergi" value="iya" onChange={(e) => handleInputChange("alergiObat", e.target.value)} className="mr-2" />IYA</label>
               <label><input type="radio" name="alergi" value="tidak" onChange={(e) => handleInputChange("alergiObat", e.target.value)} className="mr-2" />TIDAK</label>
             </div>
